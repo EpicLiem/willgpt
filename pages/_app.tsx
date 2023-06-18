@@ -10,9 +10,6 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
       <div>
-        <Head>
-          <title>WillGPT</title>
-        </Head>
         <Component {...pageProps} />
       </div>
   )
