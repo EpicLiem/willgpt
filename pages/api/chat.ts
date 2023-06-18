@@ -15,7 +15,7 @@ const handler = async (req: Request): Promise<Response> => {
 
   let messages: string = `A conversation with Will Luttrell\n\n`
   for (const message of body?.messages) {
-    if (message.role === 'user') {
+    if (message.role === 'user' && message.content !== '') {
         messages += `Liem: ${message.content}\n\n`
     }
     if (message.role === 'system') {
@@ -25,22 +25,30 @@ const handler = async (req: Request): Promise<Response> => {
         messages += `Will: ${message.content}\n\n`
     }
   }
-  messages += 'Will: '
+  messages += 'Will:'
 
   // @ts-ignore
   const payload: OpenAIStreamPayload = {
-    model: 'ada:ft-personal:will-bot-v1-1-2023-06-18-04-27-26',
+    model: 'davinci:ft-personal:will-bot-v1-1-2023-06-18-15-59-53',
     prompt: messages,
     temperature: process.env.AI_TEMP ? parseFloat(process.env.AI_TEMP) : 0.7,
     max_tokens: process.env.AI_MAX_TOKENS
       ? parseInt(process.env.AI_MAX_TOKENS)
       : 100,
     top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0,
+    frequency_penalty: 0.5,
+    presence_penalty: 0.1,
     stream: true,
     stop: ['Thi:','Liem:', 'Will:'],
     n: 1,
+    logit_bias: {
+        '83': -10,
+        '13': -10,
+        '1073': -10,
+        '5450': -10,
+        '4023': -10,
+        '14181': -50,
+    }
   }
 
   const stream = await OpenAIStream(payload)

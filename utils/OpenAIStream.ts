@@ -24,6 +24,7 @@ export interface OpenAIStreamPayload {
   stop?: string[]
   user?: string
   n: number
+  logit_bias?: Record<string, number>
 }
 
 export async function OpenAIStream(payload: OpenAIStreamPayload) {
@@ -59,6 +60,7 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
             controller.close()
             return
           }
+          console.log(data)
           try {
             const json = JSON.parse(data)
             const text = json.choices[0].text || ''

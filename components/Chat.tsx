@@ -105,6 +105,7 @@ export function Chat() {
 
       lastMessage = lastMessage + chunkValue
 
+      lastMessage = lastMessage.trimEnd()
       setMessages([
         ...newMessages,
         { role: 'assistant', content: lastMessage } as ChatGPTMessage,
