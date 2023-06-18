@@ -7,6 +7,7 @@ function Home() {
       <section className="flex flex-col gap-6">
         <Text variant="h1">WillGPT</Text>
         <Text className="text-zinc-600">
+            {/* eslint-disable-next-line react/no-unescaped-entities */}
           A model fintuned on Will's messages and tweets.
         </Text>
       </section>
