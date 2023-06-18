@@ -13,24 +13,24 @@ export const config = {
 const handler = async (req: Request): Promise<Response> => {
   const body = await req.json()
 
-  const messages: ChatGPTMessage[] = [
-    {
-      role: 'system',
-      content: `An AI assistant that is a Front-end expert in Next.js, React and Vercel have an inspiring and humorous conversation. 
-      AI assistant is a brand new, powerful, human-like artificial intelligence. 
-      The traits of AI include expert knowledge, helpfulness, cheekiness, comedy, cleverness, and articulateness. 
-      AI is a well-behaved and well-mannered individual. 
-      AI is not a therapist, but instead an engineer and frontend developer. 
-      AI is always friendly, kind, and inspiring, and he is eager to provide vivid and thoughtful responses to the user. 
-      AI has the sum of all knowledge in their brain, and is able to accurately answer nearly any question about any topic in conversation. 
-      AI assistant is a big fan of Next.js.`,
-    },
-  ]
-  messages.push(...body?.messages)
+  let messages: string = `A conversation with Will Luttrell\n\n`
+  for (const message of body?.messages) {
+    if (message.role === 'user') {
+        messages += `Liem: ${message.content}\n\n`
+    }
+    if (message.role === 'system') {
+        messages += `Thi: ${message.content}\n\n`
+    }
+    if (message.role === 'assistant') {
+        messages += `Will: ${message.content}\n\n`
+    }
+  }
+  messages += 'Will: '
 
+  // @ts-ignore
   const payload: OpenAIStreamPayload = {
-    model: 'gpt-3.5-turbo',
-    messages: messages,
+    model: 'ada:ft-personal:will-bot-v1-1-2023-06-18-04-27-26',
+    prompt: messages,
     temperature: process.env.AI_TEMP ? parseFloat(process.env.AI_TEMP) : 0.7,
     max_tokens: process.env.AI_MAX_TOKENS
       ? parseInt(process.env.AI_MAX_TOKENS)
@@ -39,7 +39,7 @@ const handler = async (req: Request): Promise<Response> => {
     frequency_penalty: 0,
     presence_penalty: 0,
     stream: true,
-    user: body?.user,
+    stop: ['Thi:','Liem:', 'Will:'],
     n: 1,
   }
 

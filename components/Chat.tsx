@@ -9,7 +9,7 @@ const COOKIE_NAME = 'nextjs-example-ai-chat-gpt3'
 export const initialMessages: ChatGPTMessage[] = [
   {
     role: 'assistant',
-    content: 'Hi! I am a friendly AI assistant. Ask me anything!',
+    content: "Hi! it's me will.",
   },
 ]
 
@@ -101,6 +101,7 @@ export function Chat() {
       const { value, done: doneReading } = await reader.read()
       done = doneReading
       const chunkValue = decoder.decode(value)
+      console.log(chunkValue)
 
       lastMessage = lastMessage + chunkValue
 
